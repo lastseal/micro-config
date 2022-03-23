@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*
 
+from datetime import datetime
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
@@ -63,10 +64,22 @@ def handle_sigterm(signum, frame):
 signal.signal(signal.SIGINT,  handle_sigint)
 signal.signal(signal.SIGTERM, handle_sigterm)
 
-CONFIG_URL = os.getenv('CONFIG_URL')
+CONFIG_URL = os.getenv('CONFIG_URL') or "mydatabase.sql"
 
-if CONFIG_URL is not None:
-    db = dataset.connect(CONFIG_URL)
+db = dataset.connect(CONFIG_URL)
+table = db['config']
 
-   
+##
+#
 
+def get(name, default=None):
+    res = table.find_one(name=name)
+    return res.get('value', default)
+
+##
+#
+
+def set(name, value):
+    data = dict(name=name, value=str(value))
+    table.upsert(data, ['name'])
+ 
