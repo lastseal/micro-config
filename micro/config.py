@@ -64,7 +64,7 @@ def handle_sigterm(signum, frame):
 signal.signal(signal.SIGINT,  handle_sigint)
 signal.signal(signal.SIGTERM, handle_sigterm)
 
-CONFIG_URL = os.getenv('CONFIG_URL') or "mydatabase.sql"
+CONFIG_URL = os.getenv('CONFIG_URL') or "sqlite:///mydatabase.db"
 
 db = dataset.connect(CONFIG_URL)
 table = db['config']
