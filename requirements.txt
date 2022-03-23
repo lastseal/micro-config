@@ -1,2 +1,3 @@
 python-dotenv>=0.13.0
 slack-sdk>=3.8.0
+dataset>=1.5.2
