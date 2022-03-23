@@ -3,6 +3,7 @@
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
+import dataset
 import logging
 import dotenv
 import signal
@@ -61,3 +62,11 @@ def handle_sigterm(signum, frame):
 
 signal.signal(signal.SIGINT,  handle_sigint)
 signal.signal(signal.SIGTERM, handle_sigterm)
+
+CONFIG_URL = os.getenv('CONFIG_URL')
+
+if CONFIG_URL is not None:
+    db = dataset.connect(CONFIG_URL)
+
+   
+
