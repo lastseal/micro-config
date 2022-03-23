@@ -72,9 +72,18 @@ table = db['config']
 ##
 #
 
-def get(name, default=None):
+def get(name, default=None, type=None):
     res = table.find_one(name=name)
-    return res.get('value', default)
+    
+    if res is None:
+        return default
+    
+    value = res['value']
+    
+    if type is datetime:
+        return datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
+    
+    return value
 
 ##
 #
