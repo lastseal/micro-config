@@ -39,12 +39,18 @@ class SlackHandler(logging.Handler):
 dotenv_path = os.path.join(os.getcwd(), ".env")
 dotenv.load_dotenv( dotenv_path )
 
-logLevel = (os.getenv("LOG_LEVEL") or 'INFO').lower()
+LOG_LEVEL = os.getenv("LOG_LEVEL") or 'INFO'
 
-logging.basicConfig(
-    format='%(asctime)s.%(msecs).03d %(levelname)s - %(message)s', 
-    level=logging.DEBUG if logLevel == 'debug' else logging.INFO
-)
+if LOG_LEVEL.lower() == "DEBUG":
+    logging.basicConfig(
+        format='%(asctime)s.%(msecs).03d [%(pathname)s:%(lineno)d] %(levelname)s - %(message)s',  
+        level=logging.DEBUG
+    )    
+else:
+    logging.basicConfig(
+        format='%(asctime)s.%(msecs).03d %(levelname)s - %(message)s', 
+        level=logging.INFO
+    )
 
 SLACK_BOT_TOKEN = os.getenv('SLACK_BOT_TOKEN')
 SLACK_CHANNEL = os.getenv('SLACK_CHANNEL')
