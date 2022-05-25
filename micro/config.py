@@ -41,7 +41,7 @@ dotenv.load_dotenv( dotenv_path )
 
 LOG_LEVEL = os.getenv("LOG_LEVEL") or 'INFO'
 
-if LOG_LEVEL.lower() == "DEBUG":
+if LOG_LEVEL.lower() == "debug":
     logging.basicConfig(
         format='%(asctime)s.%(msecs).03d [%(pathname)s:%(lineno)d] %(levelname)s - %(message)s',  
         level=logging.DEBUG
