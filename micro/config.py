@@ -2,7 +2,6 @@
 
 from datetime import datetime
 
-import dataset
 import logging
 import dotenv
 import signal
@@ -36,31 +35,3 @@ def handle_sigterm(signum, frame):
 signal.signal(signal.SIGINT,  handle_sigint)
 signal.signal(signal.SIGTERM, handle_sigterm)
 
-CONFIG_URL = os.getenv('CONFIG_URL') or "sqlite:///mydatabase.db"
-
-db = dataset.connect(CONFIG_URL)
-table = db['config']
-
-##
-#
-
-def get(name, default=None, type=None):
-    res = table.find_one(name=name)
-    
-    if res is None:
-        return default
-    
-    value = res['value']
-    
-    if type is datetime:
-        return datetime.strptime(value, "%Y-%m-%d %H:%M:%S.%f")
-    
-    return value
-
-##
-#
-
-def set(name, value):
-    data = dict(name=name, value=str(value))
-    table.upsert(data, ['name'])
- 
