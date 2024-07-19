@@ -35,3 +35,18 @@ def handle_sigterm(signum, frame):
 signal.signal(signal.SIGINT,  handle_sigint)
 signal.signal(signal.SIGTERM, handle_sigterm)
 
+def logHandler(level):
+
+    def decorator(func):
+
+        class LogHandler(logging.Handler):
+            def emit(self, record):
+                func(self.format(record))
+
+        handler = LogHandler()
+        handler.setLevel(level)
+
+        logging.getLogger().addHandler(handler)
+
+    return decorator
+    
