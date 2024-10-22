@@ -3,8 +3,10 @@
 from datetime import datetime
 
 import logging
+import hashlib
 import dotenv
 import signal
+import json
 import sys
 import os
 
@@ -49,4 +51,30 @@ def logHandler(level):
         logging.getLogger().addHandler(handler)
 
     return decorator
-    
+
+def errorHandler(service):
+
+    def decorator(func):
+
+        class LogHandler(logging.Handler):
+            def emit(self, record):
+
+                data = {
+                    "service": "SOMNI_CODELCO",
+                    "message": str(self.format(record))
+                }
+
+                payload = json.dumps(data, sort_keys=True)
+
+                data['checksum'] = hashlib.sha256(payload.encode()).hexdigest()
+
+                logging.debug("notify error: %s", data)
+                
+                func(data)
+
+        handler = LogHandler()
+        handler.setLevel(logging.ERROR)
+
+        logging.getLogger().addHandler(handler)
+
+    return decorator
