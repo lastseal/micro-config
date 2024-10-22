@@ -69,8 +69,11 @@ def errorHandler(service):
                 data['checksum'] = hashlib.sha256(payload.encode()).hexdigest()
 
                 logging.debug("notify error: %s", data)
-                
-                func(data)
+
+                try:
+                    func(data)
+                except Exception as ex:
+                    print(ex)
 
         handler = LogHandler()
         handler.setLevel(logging.ERROR)
