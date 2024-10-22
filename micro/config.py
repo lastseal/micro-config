@@ -60,7 +60,7 @@ def errorHandler(service):
             def emit(self, record):
 
                 data = {
-                    "service": "SOMNI_CODELCO",
+                    "service": service,
                     "message": str(self.format(record))
                 }
 
